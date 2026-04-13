@@ -1,0 +1,39 @@
+{{define "content"}}
+<div class="profile-page">
+  <div class="profile-hero">
+    <div class="profile-avatar">{{slice .Data.Author.Username 0 1}}</div>
+    <div class="profile-info">
+      <h1>{{.Data.Author.Username}}</h1>
+      <p class="profile-joined">Member since {{formatDate .Data.Author.CreatedAt}}</p>
+      <p class="profile-stats"><span>📝 {{len .Data.Posts}} posts published</span></p>
+    </div>
+  </div>
+  <div class="profile-posts">
+    <h2>Stories by {{.Data.Author.Username}}</h2>
+    {{if .Data.Posts}}
+    <div class="posts-grid">
+      {{range .Data.Posts}}
+      <article class="post-card">
+        <div class="post-card-emoji">{{.CoverEmoji}}</div>
+        <div class="post-card-body">
+          {{if .Tags}}<div class="post-tags">{{range .Tags}}<span class="tag">{{.}}</span>{{end}}</div>{{end}}
+          <h3 class="post-card-title"><a href="/post/{{.ID}}">{{.Title}}</a></h3>
+          <p class="post-card-excerpt">{{truncate .Excerpt 140}}</p>
+          <div class="post-card-footer">
+            <span style="color:var(--text3);font-size:.85rem">{{formatDate .CreatedAt}}</span>
+            <div class="post-meta-right">
+              <span class="meta-item">👁 {{.Views}}</span>
+              <span class="meta-item">❤️ {{.Likes}}</span>
+              <a href="/post/{{.ID}}" class="read-more">Read →</a>
+            </div>
+          </div>
+        </div>
+      </article>
+      {{end}}
+    </div>
+    {{else}}
+    <div class="empty-state"><div class="empty-icon">📝</div><p>No published posts yet.</p></div>
+    {{end}}
+  </div>
+</div>
+{{end}}

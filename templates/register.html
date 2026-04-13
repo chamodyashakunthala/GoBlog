@@ -1,0 +1,39 @@
+{{define "content"}}
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="auth-logo">🚀</div>
+      <h1>Start your blog</h1>
+      <p>Create your free GoBlog account today</p>
+    </div>
+    {{if and .Flash (eq .FlashType "error")}}<div class="form-error-banner">{{.Flash}}</div>{{end}}
+    <form class="auth-form" method="POST" action="/register">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="johndoe" minlength="3" required autocomplete="username"/>
+        <small>Minimum 3 characters. Shown publicly.</small>
+      </div>
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email"/>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Min. 6 characters" minlength="6" required autocomplete="new-password"/>
+      </div>
+      <button type="submit" class="btn btn-primary btn-auth">Create Account →</button>
+    </form>
+    <div class="auth-divider"><span>Already have an account?</span></div>
+    <a href="/login" class="btn btn-outline btn-auth">Sign in instead</a>
+  </div>
+  <div class="auth-visual">
+    <blockquote>"You don't start out writing good stuff. You start out writing crap and thinking it's good stuff."</blockquote>
+    <cite>— Ira Glass</cite>
+    <div class="auth-features">
+      <div class="af-item">✅ Free forever</div>
+      <div class="af-item">✅ No setup required</div>
+      <div class="af-item">✅ Publish instantly</div>
+    </div>
+  </div>
+</div>
+{{end}}

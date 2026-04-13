@@ -1,0 +1,68 @@
+{{define "content"}}
+<div class="post-form-page">
+  <div class="post-form-header">
+    <div><h1>{{if .Data.Post}}Edit Post{{else}}New Post{{end}}</h1><p>{{if .Data.Post}}Update your story{{else}}Share something amazing with the world{{end}}</p></div>
+    <a href="/dashboard" class="btn btn-outline">← Dashboard</a>
+  </div>
+  {{if and .Flash (eq .FlashType "error")}}<div class="form-error-banner">{{.Flash}}</div>{{end}}
+  <form class="post-form" method="POST" action="{{if .Data.Post}}/dashboard/posts/{{.Data.Post.ID}}/update{{else}}/dashboard/posts/new{{end}}">
+    <div class="post-form-body">
+      <div class="post-form-main">
+        <div class="form-group">
+          <input type="text" name="title" id="title" class="title-input" placeholder="Your post title..."
+            value="{{if .Data.Post}}{{.Data.Post.Title}}{{end}}" required autofocus/>
+        </div>
+        <div class="editor-toolbar">
+          <button type="button" onclick="wrap('**','**')" title="Bold">𝐁</button>
+          <button type="button" onclick="wrap('*','*')" title="Italic">𝐼</button>
+          <button type="button" onclick="insertLine('&lt;h2&gt;','&lt;/h2&gt;')" title="Heading">H2</button>
+          <button type="button" onclick="wrapBlock('&lt;blockquote&gt;','&lt;/blockquote&gt;')" title="Quote">❝</button>
+          <button type="button" onclick="insertLine('&lt;ul&gt;\n  &lt;li&gt;','&lt;/li&gt;\n&lt;/ul&gt;')" title="List">≡</button>
+          <button type="button" onclick="insertSnippet('&lt;hr/&gt;')" title="Divider">—</button>
+          <button type="button" onclick="wrap('&lt;code&gt;','&lt;/code&gt;')" title="Code">⌨</button>
+          <button type="button" onclick="wrapBlock('&lt;strong&gt;','&lt;/strong&gt;')" title="Bold HTML">B</button>
+          <button type="button" onclick="wrapBlock('&lt;em&gt;','&lt;/em&gt;')" title="Italic HTML">i</button>
+          <span class="toolbar-sep"></span>
+          <span class="toolbar-hint">HTML is supported for formatting</span>
+        </div>
+        <div class="form-group">
+          <textarea name="content" id="content" class="content-input"
+            placeholder="Write your story here... HTML is supported: &lt;h2&gt;, &lt;p&gt;, &lt;strong&gt;, &lt;em&gt;, &lt;blockquote&gt;, &lt;code&gt;, &lt;ul&gt;, &lt;li&gt;" required>{{if .Data.Post}}{{.Data.Post.Content}}{{end}}</textarea>
+        </div>
+      </div>
+      <div class="post-form-sidebar">
+        <div class="sidebar-widget">
+          <h3>Publish</h3>
+          <div class="publish-toggle">
+            <label class="toggle-label">
+              <input type="checkbox" name="published" id="published" {{if .Data.Post}}{{if .Data.Post.Published}}checked{{end}}{{end}}/>
+              <span class="toggle-switch"></span>
+              <span id="pub-label">{{if .Data.Post}}{{if .Data.Post.Published}}Published{{else}}Draft{{end}}{{else}}Draft{{end}}</span>
+            </label>
+          </div>
+          <p class="widget-hint">Toggle to make post visible publicly.</p>
+        </div>
+        <div class="sidebar-widget">
+          <h3>Tags</h3>
+          <div class="form-group">
+            <input type="text" name="tags" placeholder="go, programming, tutorial"
+              value="{{if .Data.Post}}{{range $i, $t := .Data.Post.Tags}}{{if $i}}, {{end}}{{$t}}{{end}}{{end}}"/>
+            <small>Comma-separated tags</small>
+          </div>
+        </div>
+        <div class="sidebar-widget">
+          <h3>Preview</h3>
+          <div class="preview-box">
+            <div class="preview-emoji" id="preview-emoji">✨</div>
+            <div class="preview-title" id="preview-title">Your title will appear here</div>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary btn-full-w">{{if .Data.Post}}Update Post ✓{{else}}Publish Post 🚀{{end}}</button>
+          <a href="/dashboard" class="btn btn-outline btn-full-w">Cancel</a>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+{{end}}

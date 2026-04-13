@@ -1,0 +1,34 @@
+{{define "content"}}
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="auth-logo">✍️</div>
+      <h1>Welcome back</h1>
+      <p>Sign in to your GoBlog account</p>
+    </div>
+    {{if and .Flash (eq .FlashType "error")}}<div class="form-error-banner">{{.Flash}}</div>{{end}}
+    <form class="auth-form" method="POST" action="/login">
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email"/>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="••••••••" required autocomplete="current-password"/>
+      </div>
+      <button type="submit" class="btn btn-primary btn-auth">Sign In →</button>
+    </form>
+    <div class="auth-divider"><span>New to GoBlog?</span></div>
+    <a href="/register" class="btn btn-outline btn-auth">Create free account</a>
+  </div>
+  <div class="auth-visual">
+    <blockquote>"The scariest moment is always just before you start."</blockquote>
+    <cite>— Stephen King</cite>
+    <div class="auth-features">
+      <div class="af-item">✅ Free forever</div>
+      <div class="af-item">✅ No setup required</div>
+      <div class="af-item">✅ Publish instantly</div>
+    </div>
+  </div>
+</div>
+{{end}}

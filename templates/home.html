@@ -1,0 +1,79 @@
+{{define "content"}}
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🚀 The Modern Blogging Platform</div>
+    <h1 class="hero-title">Share Your Ideas<br/><span class="gradient-text">With The World</span></h1>
+    <p class="hero-subtitle">A beautifully minimal blog platform built with pure Go. Write, publish, and connect with readers worldwide.</p>
+    {{if .LoggedIn}}
+    <div class="hero-actions">
+      <a href="/dashboard/posts/new" class="btn btn-hero-primary">✍️ Write New Post</a>
+      <a href="/dashboard" class="btn btn-hero-secondary">My Dashboard</a>
+    </div>
+    {{else}}
+    <div class="hero-actions">
+      <a href="/register" class="btn btn-hero-primary">Start Writing Free →</a>
+      <a href="/login" class="btn btn-hero-secondary">Sign In</a>
+    </div>
+    {{end}}
+    <div class="hero-stats">
+      <div class="stat"><strong>{{.Data.TotalPosts}}</strong><span>Posts Published</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><strong>100%</strong><span>Open Source</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><strong>0</strong><span>Dependencies</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="posts-section">
+  <div class="section-header">
+    <div>
+      <h2 class="section-title">Latest Stories</h2>
+      <p class="section-subtitle">Fresh ideas from our community of writers</p>
+    </div>
+  </div>
+  {{if .Data.Posts}}
+  <div class="posts-grid">
+    {{range $i, $p := .Data.Posts}}
+    <article class="post-card {{if eq $i 0}}post-card-featured{{end}}">
+      <div class="post-card-emoji">{{$p.CoverEmoji}}</div>
+      <div class="post-card-body">
+        {{if $p.Tags}}<div class="post-tags">{{range $p.Tags}}<span class="tag">{{.}}</span>{{end}}</div>{{end}}
+        <h3 class="post-card-title"><a href="/post/{{$p.ID}}">{{$p.Title}}</a></h3>
+        <p class="post-card-excerpt">{{truncate $p.Excerpt 160}}</p>
+        <div class="post-card-footer">
+          <a href="/author/{{$p.AuthorName}}" class="post-author">
+            <div class="author-avatar">{{slice $p.AuthorName 0 1}}</div>
+            <div><strong>{{$p.AuthorName}}</strong><span>{{formatDate $p.CreatedAt}}</span></div>
+          </a>
+          <div class="post-meta-right">
+            <span class="meta-item">👁 {{$p.Views}}</span>
+            <span class="meta-item">❤️ {{$p.Likes}}</span>
+            <a href="/post/{{$p.ID}}" class="read-more">Read →</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    {{end}}
+  </div>
+  {{else}}
+  <div class="empty-state">
+    <div class="empty-icon">📝</div>
+    <h3>No stories yet</h3>
+    <p>Be the first to share your ideas with the world!</p>
+    <a href="/register" class="btn btn-primary">Start Writing</a>
+  </div>
+  {{end}}
+</section>
+
+{{if not .LoggedIn}}
+<section class="cta-section">
+  <div class="cta-inner">
+    <h2>Ready to share your story?</h2>
+    <p>Join GoBlog today and reach readers who care about your ideas.</p>
+    <a href="/register" class="btn btn-white">Create Free Account →</a>
+  </div>
+</section>
+{{end}}
+{{end}}

@@ -1,0 +1,79 @@
+{{define "content"}}
+<div class="post-page">
+  <div class="post-hero">
+    <div class="post-emoji-cover">{{.Data.Post.CoverEmoji}}</div>
+    {{if .Data.Post.Tags}}<div class="post-tags center-tags">{{range .Data.Post.Tags}}<span class="tag">{{.}}</span>{{end}}</div>{{end}}
+    <h1 class="post-title">{{.Data.Post.Title}}</h1>
+    <div class="post-byline">
+      <a href="/author/{{.Data.Post.AuthorName}}" class="post-author-link">
+        <div class="author-avatar lg">{{slice .Data.Post.AuthorName 0 1}}</div>
+        <div><strong>{{.Data.Post.AuthorName}}</strong><span>{{formatFull .Data.Post.CreatedAt}}</span></div>
+      </a>
+      <div class="post-stats"><span>👁 {{.Data.Post.Views}} views</span><span>❤️ {{.Data.Post.Likes}} likes</span></div>
+    </div>
+  </div>
+
+  <div class="post-layout">
+    <aside class="post-sidebar">
+      <div class="sidebar-sticky">
+        <p class="sidebar-label">Like</p>
+        <form method="POST" action="/post/{{.Data.Post.ID}}/like">
+          <button type="submit" class="like-btn">❤️ Like <span>{{.Data.Post.Likes}}</span></button>
+        </form>
+        <div class="sidebar-divider"></div>
+        <p class="sidebar-label">Author</p>
+        <a href="/author/{{.Data.Post.AuthorName}}" class="sidebar-author">
+          <div class="author-avatar md">{{slice .Data.Post.AuthorName 0 1}}</div>
+          <strong>{{.Data.Post.AuthorName}}</strong>
+        </a>
+        {{if .LoggedIn}}{{if eq .UserID .Data.Post.AuthorID}}
+        <div class="sidebar-divider"></div>
+        <a href="/dashboard/posts/{{.Data.Post.ID}}/edit" class="btn btn-outline btn-full-w">✏️ Edit Post</a>
+        {{end}}{{end}}
+      </div>
+    </aside>
+
+    <article class="post-content">
+      <div class="prose">{{safeHTML .Data.Post.Content}}</div>
+      {{if .Data.Post.Tags}}<div class="post-content-tags"><strong>Tags:</strong>{{range .Data.Post.Tags}}<span class="tag">{{.}}</span>{{end}}</div>{{end}}
+      <div class="like-mobile">
+        <form method="POST" action="/post/{{.Data.Post.ID}}/like">
+          <button type="submit" class="like-btn-lg">❤️ Like this post · <span>{{.Data.Post.Likes}}</span></button>
+        </form>
+      </div>
+
+      <div class="comments-section">
+        <h3 class="comments-title">💬 Comments <span class="comments-count">{{lenComments .Data.Comments}}</span></h3>
+        {{if .Data.Comments}}
+        <div class="comments-list">
+          {{range .Data.Comments}}
+          <div class="comment">
+            <div class="comment-avatar">{{slice .AuthorName 0 1}}</div>
+            <div class="comment-body">
+              <div class="comment-header"><strong>{{.AuthorName}}</strong><span>{{formatDate .CreatedAt}}</span></div>
+              <p>{{.Content}}</p>
+            </div>
+          </div>
+          {{end}}
+        </div>
+        {{else}}
+        <div class="no-comments">No comments yet. Be the first to share your thoughts!</div>
+        {{end}}
+        {{if .LoggedIn}}
+        <form class="comment-form" method="POST" action="/post/{{.Data.Post.ID}}/comment">
+          <div class="comment-form-inner">
+            <div class="author-avatar">{{slice .Username 0 1}}</div>
+            <div class="comment-input-wrap">
+              <textarea name="content" placeholder="Share your thoughts..." rows="3" required></textarea>
+              <button type="submit" class="btn btn-primary">Post Comment</button>
+            </div>
+          </div>
+        </form>
+        {{else}}
+        <div class="comment-login-prompt"><a href="/login">Login</a> or <a href="/register">Register</a> to leave a comment.</div>
+        {{end}}
+      </div>
+    </article>
+  </div>
+</div>
+{{end}}
