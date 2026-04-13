@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>{{.Title}}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/static/css/style.css"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand"><span class="brand-icon">✍️</span><span class="brand-text">GoBlog</span></a>
+    <div class="nav-center"><a href="/" class="nav-link">Home</a></div>
+    <div class="nav-right">
+      {{if .LoggedIn}}
+        <a href="/dashboard" class="nav-link">Dashboard</a>
+        <a href="/dashboard/posts/new" class="btn btn-primary btn-sm">＋ New Post</a>
+        <a href="/author/{{.Username}}" class="avatar-btn" title="{{.Username}}">{{slice .Username 0 1}}</a>
+        <a href="/logout" class="nav-link muted">Logout</a>
+      {{else}}
+        <a href="/login" class="nav-link">Login</a>
+        <a href="/register" class="btn btn-primary btn-sm">Get Started →</a>
+      {{end}}
+    </div>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-mobile').classList.toggle('open')">☰</button>
+  </div>
+  <div class="nav-mobile">
+    <a href="/">Home</a>
+    {{if .LoggedIn}}
+      <a href="/dashboard">Dashboard</a>
+      <a href="/dashboard/posts/new">＋ New Post</a>
+      <a href="/author/{{.Username}}">My Profile</a>
+      <a href="/logout">Logout</a>
+    {{else}}
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    {{end}}
+  </div>
+</nav>
+
+{{if .Flash}}
+<div class="flash flash-{{.FlashType}}">
+  <span class="flash-icon">{{if eq .FlashType "success"}}✅{{else if eq .FlashType "error"}}❌{{else}}ℹ️{{end}}</span>
+  {{.Flash}}
+  <button class="flash-close" onclick="this.parentElement.remove()">✕</button>
+</div>
+{{end}}
+
+<main>{{template "content" .}}</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand"><strong>✍️ GoBlog</strong><p>A modern blog platform built with pure Go — zero dependencies.</p></div>
+    <div class="footer-links"><a href="/">Home</a><a href="/register">Join</a><a href="/login">Login</a></div>
+  </div>
+  <div class="footer-bottom"><p>Built with ❤️ using Go · Standard library only · No frameworks, no nonsense.</p></div>
+</footer>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>
