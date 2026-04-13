@@ -1,0 +1,48 @@
+{{define "content"}}
+<div class="dashboard-page">
+  <div class="dash-header">
+    <div><h1>My Dashboard</h1><p>Welcome back, <strong>{{.Username}}</strong> 👋</p></div>
+    <a href="/dashboard/posts/new" class="btn btn-primary">＋ New Post</a>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-icon">📝</div><div class="stat-value">{{.Data.TotalPosts}}</div><div class="stat-label">Total Posts</div></div>
+    <div class="stat-card"><div class="stat-icon">👁</div><div class="stat-value">{{.Data.TotalViews}}</div><div class="stat-label">Total Views</div></div>
+    <div class="stat-card"><div class="stat-icon">❤️</div><div class="stat-value">{{.Data.TotalLikes}}</div><div class="stat-label">Total Likes</div></div>
+    <div class="stat-card"><div class="stat-icon">🌐</div><a href="/author/{{.Username}}" class="stat-value stat-link">View Profile</a><div class="stat-label">Public Page</div></div>
+  </div>
+  <div class="dash-section">
+    <div class="dash-section-header"><h2>My Posts</h2></div>
+    {{if .Data.Posts}}
+    <div class="posts-table-wrap">
+      <table class="posts-table">
+        <thead><tr><th>Title</th><th>Status</th><th>Views</th><th>Likes</th><th>Date</th><th>Actions</th></tr></thead>
+        <tbody>
+          {{range .Data.Posts}}
+          <tr>
+            <td class="post-title-cell"><span class="post-emoji-sm">{{.CoverEmoji}}</span><a href="/post/{{.ID}}">{{.Title}}</a></td>
+            <td>{{if .Published}}<span class="badge badge-live">● Live</span>{{else}}<span class="badge badge-draft">◌ Draft</span>{{end}}</td>
+            <td class="num-cell">👁 {{.Views}}</td>
+            <td class="num-cell">❤️ {{.Likes}}</td>
+            <td class="date-cell">{{formatDate .CreatedAt}}</td>
+            <td class="actions-cell">
+              <a href="/dashboard/posts/{{.ID}}/edit" class="action-btn edit-btn">Edit</a>
+              <form method="POST" action="/dashboard/posts/{{.ID}}/delete" style="display:inline">
+                <button type="submit" class="action-btn delete-btn" onclick="return confirm('Delete this post permanently?')">Delete</button>
+              </form>
+            </td>
+          </tr>
+          {{end}}
+        </tbody>
+      </table>
+    </div>
+    {{else}}
+    <div class="empty-state-dash">
+      <div class="empty-icon">✍️</div>
+      <h3>No posts yet</h3>
+      <p>Start sharing your ideas with the world.</p>
+      <a href="/dashboard/posts/new" class="btn btn-primary">Write your first post</a>
+    </div>
+    {{end}}
+  </div>
+</div>
+{{end}}
